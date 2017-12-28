@@ -1,0 +1,54 @@
+sudo: required
+
+services:
+  - docker
+
+cache:
+  timeout: 600
+  bundler: true
+  directories:
+  - $HOME/.stack
+  - $HOME/docker    
+
+# https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
+env:
+  - MODULE=codeworld-api
+  - MODULE=codeworld-base
+  - MODULE=codeworld-compiler
+  - MODULE=codeworld-error-sanitizer
+  - MODULE=codeworld-game-api
+  - MODULE=codeworld-game-server
+  - MODULE=codeworld-prediction
+  - MODULE=codeworld-server
+
+
+before_install:
+  - df -h
+  
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+
+  # Load cached docker images
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+
+
+  # Download and unpack the stack executable
+  - mkdir -p ~/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  - stack setup
+
+  - stack docker pull
+
+script:
+
+
+before_cache:
+  # Save tagged docker images
+  - >
+    mkdir -p $HOME/docker && docker images "fpco/*" -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+
+  
