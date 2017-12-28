@@ -43,6 +43,10 @@ before_install:
   - stack docker pull
 
 script:
+  - pwd
+  - ls
+  - cd $MODULE
+  - stack build
 
 
 before_cache:
