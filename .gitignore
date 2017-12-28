@@ -12,3 +12,4 @@ nohup.out
 web/closure-library
 third_party/closure-library
 testcase-output
+.stack-work/

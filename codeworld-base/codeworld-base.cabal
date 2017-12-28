@@ -28,7 +28,7 @@ Library
                        Internal.Event,
                        Internal.CodeWorld,
                        Internal.Truth
-  Build-depends:       base,
+  Build-depends:       base >= 4.8 && < 5,
                        bytestring,
                        codeworld-error-sanitizer,
                        codeworld-api,
