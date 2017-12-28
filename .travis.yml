@@ -8,18 +8,27 @@ cache:
   bundler: true
   directories:
   - $HOME/.stack
-  - $HOME/docker    
+  - $HOME/docker/
+  - $HOME/codeworld-api/.stack-work
+  - $HOME/codeworld-base/.stack-work
+  - $HOME/codeworld-compiler/.stack-work
+  - $HOME/codeworld-error-sanitizer/.stack-work
+  - $HOME/codeworld-game-api/.stack-work
+  - $HOME/codeworld-game-server/.stack-work
+  - $HOME/codeworld-prediction/.stack-work
+  - $HOME/codeworld-server/.stack-work
+  
 
 # https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 env:
   - MODULE=codeworld-api
-  - MODULE=codeworld-base
-  - MODULE=codeworld-compiler
-  - MODULE=codeworld-error-sanitizer
-  - MODULE=codeworld-game-api
-  - MODULE=codeworld-game-server
-  - MODULE=codeworld-prediction
-  - MODULE=codeworld-server
+  # - MODULE=codeworld-base
+  # - MODULE=codeworld-compiler
+  # - MODULE=codeworld-error-sanitizer
+  # - MODULE=codeworld-game-api
+  # - MODULE=codeworld-game-server
+  # - MODULE=codeworld-prediction
+  # - MODULE=codeworld-server
 
 
 before_install:
