@@ -9,3 +9,7 @@ extra-deps: [filesystem-trees-0.1.0.6, time-1.7.0.1, directory-1.2.7.1]
 
 docker:
   enable: true
+
+ghc-options:
+  "*": -j -threaded
+  

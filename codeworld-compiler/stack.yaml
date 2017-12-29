@@ -6,3 +6,7 @@ packages:
 
 docker:
   enable: true
+
+ghc-options:
+  "*": -j -threaded
+  

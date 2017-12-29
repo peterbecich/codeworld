@@ -1,8 +1,10 @@
-
 resolver: lts-10.1
 
 packages:
 - .
+- ../codeworld-game-api
+- ../codeworld-api
+
 
 docker:
   enable: true
