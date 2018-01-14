@@ -61,7 +61,7 @@ script:
   - ls
   - cd $MODULE
   - stack build
-  - stack test
+  # - stack test
 
 # before_cache:
 #   # Save fpco docker images
