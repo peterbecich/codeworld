@@ -50,6 +50,12 @@ before_install:
   - docker pull fpco/stack-build:lts-10.3
   - docker pull fpco/stack-build:lts-7.19
 
+  # Save fpco docker images
+  - >
+    mkdir -p $HOME/docker && docker images "fpco/*" -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+  
+
   # Download and unpack the stack executable
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
@@ -60,13 +66,13 @@ script:
   - pwd
   - ls
   - cd $MODULE
-  - stack build
+  # - stack build
   # - stack test
 
 before_cache:
   # Save fpco docker images
-  - >
-    mkdir -p $HOME/docker && docker images "fpco/*" -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
-    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+  # - >
+  #   mkdir -p $HOME/docker && docker images "fpco/*" -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+  #   | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 
   
