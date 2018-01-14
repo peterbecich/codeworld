@@ -25,14 +25,14 @@ cache:
 
 # https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 env:
-  - MODULE=codeworld-api
-  - MODULE=codeworld-base
-  - MODULE=codeworld-compiler
+  # - MODULE=codeworld-api
+  # - MODULE=codeworld-base
+  # - MODULE=codeworld-compiler
   - MODULE=codeworld-error-sanitizer
   - MODULE=codeworld-game-api
   - MODULE=codeworld-game-server
   - MODULE=codeworld-prediction
-  - MODULE=codeworld-server
+  # - MODULE=codeworld-server
 
 
 before_install:
