@@ -1,4 +1,4 @@
-resolver: lts-10.1
+resolver: lts-10.3
 compiler: ghcjs-0.2.1.9007019_ghc-8.0.1
 
 # https://docs.haskellstack.org/en/stable/ghcjs/

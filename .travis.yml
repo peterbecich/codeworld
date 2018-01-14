@@ -53,7 +53,7 @@ before_install:
   - stack setup
 
   # - stack docker pull
-  - docker pull fpco/stack-build:lts-10.1
+  - docker pull fpco/stack-build:lts-10.3
 
 script:
   - pwd
