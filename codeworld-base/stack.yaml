@@ -21,8 +21,8 @@ packages:
 - ../codeworld-game-api
 - ../codeworld-prediction
 
-# docker:
-#   enable: true
+docker:
+  enable: true
 
 # ghc-options:
 #   "*": -j -threaded
