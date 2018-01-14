@@ -13,8 +13,8 @@ packages:
 - .
 - ../codeworld-api
 
-docker:
-  enable: true
+# docker:
+#   enable: true
 
 ghc-options:
   "*": -j -threaded
