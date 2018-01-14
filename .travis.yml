@@ -25,9 +25,9 @@ cache:
 
 # https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 env:
-  # - MODULE=codeworld-api
-  # - MODULE=codeworld-base
-  # - MODULE=codeworld-compiler
+  - MODULE=codeworld-api
+  - MODULE=codeworld-base
+  - MODULE=codeworld-compiler
   - MODULE=codeworld-error-sanitizer
   - MODULE=codeworld-game-api
   - MODULE=codeworld-game-server
@@ -54,6 +54,7 @@ before_install:
 
   # - stack docker pull
   - docker pull fpco/stack-build:lts-10.3
+  - docker pull fpco/stack-build:lts-7.19
 
 script:
   - pwd
