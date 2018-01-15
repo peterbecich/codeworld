@@ -46,9 +46,13 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
 
+  - df -h
+
   # - stack docker pull
   - docker pull fpco/stack-build:lts-10.3
   - docker pull fpco/stack-build:lts-7.19
+
+  - df -h
 
   # Save fpco docker images
   - >
@@ -56,6 +60,8 @@ before_install:
     | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
   
 
+  - df -h
+  
   # Download and unpack the stack executable
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
