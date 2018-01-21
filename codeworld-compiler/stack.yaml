@@ -1,10 +1,24 @@
 # resolver: lts-10.3
 
-resolver: lts-7.19
-compiler: ghcjs-0.2.1.9007019_ghc-8.0.1
+# resolver: lts-7.19
+# compiler: ghcjs-0.2.1.9007019_ghc-8.0.1
+# compiler-check: match-exact
+
+# The command "stack setup" exited with 1.
+# 1.14s$ stack build --fast
+# No information found for ghcjs-0.2.1.9007019_ghc-8.0.1.
+# Supported versions for OS key 'source': GhcjsVersion 0.1.0.20150924 7.10.2
+# The command "stack build --fast" exited with 1.
+# 1.12s$ stack test --fast
+# No information found for ghcjs-0.2.1.9007019_ghc-8.0.1.
+# Supported versions for OS key 'source': GhcjsVersion 0.1.0.20150924 7.10.2
+
+# https://docs.haskellstack.org/en/stable/ghcjs/#ghcjs-old-base
+resolver: lts-3.22
+compiler: ghcjs-0.1.0.20150924_ghc-7.10.2
 compiler-check: match-exact
 
-extra-deps: [hindent-5.2.4.1, haskell-src-exts-1.20.1]
+extra-deps: [hindent-5.2.4.1, haskell-src-exts-1.20.1, semigroupoids-5.2.2, tagged-0.8.5]
 
 packages:
 - .

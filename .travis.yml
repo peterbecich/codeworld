@@ -27,7 +27,7 @@ cache:
 env:
   - MODULE=codeworld-api DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
   - MODULE=codeworld-base DOCKER_BASE_IMAGE=fpco/stack-build:lts-7.19
-  - MODULE=codeworld-compiler DOCKER_BASE_IMAGE=fpco/stack-build:lts-7.19
+  - MODULE=codeworld-compiler DOCKER_BASE_IMAGE=fpco/stack-build:lts-3.22
   - MODULE=codeworld-error-sanitizer DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
   - MODULE=codeworld-game-api DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
   - MODULE=codeworld-game-server DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
