@@ -3,7 +3,7 @@
 
 resolver: lts-7.19
 compiler: ghcjs-0.2.1.9007019_ghc-8.0.1
-compiler-check: match-exact
+# compiler-check: match-exact
 
 # https://docs.haskellstack.org/en/stable/ghcjs/
 setup-info:
