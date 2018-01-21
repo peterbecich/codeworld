@@ -2,7 +2,7 @@
 
 resolver: lts-7.19
 compiler: ghcjs-0.2.1.9007019_ghc-8.0.1
-compiler-check: match-exact
+# compiler-check: match-exact
 
 extra-deps: [hindent-5.2.4.1, haskell-src-exts-1.20.1]
 
