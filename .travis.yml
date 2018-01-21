@@ -12,7 +12,7 @@ cache:
   bundler: true
   directories:
   - $HOME/.stack
-  - $HOME/docker/
+  # - $HOME/docker/
   - $HOME/codeworld-api/.stack-work
   - $HOME/codeworld-base/.stack-work
   - $HOME/codeworld-compiler/.stack-work
@@ -25,21 +25,21 @@ cache:
 
 # https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 env:
-  # - MODULE=codeworld-api
-  # - MODULE=codeworld-base
-  # - MODULE=codeworld-compiler
-  # - MODULE=codeworld-error-sanitizer
+  - MODULE=codeworld-api
+  - MODULE=codeworld-base
+  - MODULE=codeworld-compiler
+  - MODULE=codeworld-error-sanitizer
   - MODULE=codeworld-game-api
-  # - MODULE=codeworld-game-server
-  # - MODULE=codeworld-prediction
-  # - MODULE=codeworld-server
+  - MODULE=codeworld-game-server
+  - MODULE=codeworld-prediction
+  - MODULE=codeworld-server
 
 
 before_install:
   - df -h
   # Load cached docker images
   # https://github.com/travis-ci/travis-ci/issues/5358#issuecomment-248915326
-  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+  # - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -72,7 +72,7 @@ script:
   - pwd
   - ls
   - cd $MODULE
-  # - stack build
+  - stack build --fast
   # - stack test
 
 before_cache:
