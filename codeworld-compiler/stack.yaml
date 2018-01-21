@@ -18,8 +18,8 @@ packages:
 - .
 - ../codeworld-error-sanitizer
 
-docker:
-  enable: true
+# docker:
+#   enable: true
 
 # ghc-options:
 #   "*": -j -threaded

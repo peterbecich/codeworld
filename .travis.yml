@@ -73,7 +73,7 @@ script:
   - cd $MODULE
   - stack setup
   - stack build --fast
-  - stack test --fast
+  # - stack test --fast
 
 # before_cache:
   # Save fpco docker images
