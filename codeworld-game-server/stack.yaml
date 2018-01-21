@@ -9,7 +9,7 @@ packages:
 docker:
   enable: true
 
-ghc-options:
+# ghc-options:
   # "*": -j -threaded
-  "*": +RTS -T -RTS
+  # "*": +RTS -T -RTS
   

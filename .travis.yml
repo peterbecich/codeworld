@@ -25,15 +25,14 @@ cache:
 
 # https://docs.travis-ci.com/user/customizing-the-build#Build-Matrix
 env:
-  - MODULE=codeworld-api
-  - MODULE=codeworld-base
-  - MODULE=codeworld-compiler
-  - MODULE=codeworld-error-sanitizer
-  - MODULE=codeworld-game-api
-  - MODULE=codeworld-game-server
-  - MODULE=codeworld-prediction
-  - MODULE=codeworld-server
-
+  - MODULE=codeworld-api DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
+  - MODULE=codeworld-base DOCKER_BASE_IMAGE=fpco/stack-build:lts-7.19
+  - MODULE=codeworld-compiler DOCKER_BASE_IMAGE=fpco/stack-build:lts-7.19
+  - MODULE=codeworld-error-sanitizer DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
+  - MODULE=codeworld-game-api DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
+  - MODULE=codeworld-game-server DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
+  - MODULE=codeworld-prediction DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
+  - MODULE=codeworld-server DOCKER_BASE_IMAGE=fpco/stack-build:lts-10.3
 
 before_install:
   - df -h
@@ -49,8 +48,9 @@ before_install:
   - df -h
 
   # - stack docker pull
-  - docker pull fpco/stack-build:lts-10.3
-  - docker pull fpco/stack-build:lts-7.19
+  # - travis_wait 20 docker pull fpco/stack-build:lts-10.3
+  # - travis_wait 20 docker pull fpco/stack-build:lts-7.19
+  - travis_wait 20 docker pull $DOCKER_BASE_IMAGE
 
   - df -h
 
@@ -66,16 +66,16 @@ before_install:
   - mkdir -p ~/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
   - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-  - stack setup
 
 script:
   - pwd
   - ls
   - cd $MODULE
+  - stack setup
   - stack build --fast
   - stack test
 
-before_cache:
+# before_cache:
   # Save fpco docker images
   # - >
   #   mkdir -p $HOME/docker && docker images "fpco/*" -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
