@@ -73,6 +73,7 @@ script:
   - cd $MODULE
   - stack setup
   - stack build --fast --only-dependencies
+  - stack test --fast --only-dependencies
   # - stack build --fast
   # - stack test --fast
 
