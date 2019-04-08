@@ -41,7 +41,7 @@ class (Data a, Typeable a) => Template a where
   toStr :: a -> Maybe a
 
 instance Template (Pat SrcSpanInfo) where
-  toSplice (PSplice _ s) = Just s
+  toSplice _ = undefined
   toSplice _ = Nothing
 
   fromBracket (PatBracket _ p) = Just p

@@ -50,14 +50,13 @@ import           Web.JWT
                     ( ClaimsMap(..)
                     , JSON
                     , JWTClaimsSet(..)
-                    , Signer(..)
+                    , Signer
                     , StringOrURI
                     , claims
                     , decodeAndVerifySignature
                     , encodeSigned
                     , stringOrURI
                     , stringOrURIToText
-                    , unClaimsMap
                     )
 
 newtype Issuer = Issuer Text deriving (Eq, Show)

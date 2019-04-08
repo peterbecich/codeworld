@@ -1,0 +1,37 @@
+        
+packages:
+  - .
+
+allow-newer: true
+
+extra-deps:
+  - ghcjs-dom-0.8.0.0
+  - ghcjs-dom-jsffi-0.8.0.0
+  - deepseq-1.4.4.0
+  # - tagged-0.8.1
+  - ../codeworld-api
+  - ../codeworld-error-sanitizer
+  - ../codeworld-game-api
+  - ../codeworld-prediction
+
+  
+# resolver: lts-9.21
+# compiler: ghcjs-0.2.1.9009021_ghc-8.0.2
+# compiler-check: match-exact
+# setup-info:
+#   ghcjs:
+#     source:
+#       ghcjs-0.2.1.9009021_ghc-8.0.2:
+#         url: https://github.com/matchwood/ghcjs-stack-dist/raw/master/ghcjs-0.2.1.9009021.tar.gz
+#         sha1: b1740c3c99e5039ac306702894cd6e58283f4d31
+  
+  
+resolver: lts-8.22
+compiler: ghcjs-0.2.1.9008011_ghc-8.0.2
+compiler-check: match-exact
+setup-info:
+  ghcjs:
+    source:
+      ghcjs-0.2.1.9008011_ghc-8.0.2:
+        url: https://github.com/matchwood/ghcjs-stack-dist/raw/master/ghcjs-0.2.1.9008011.tar.gz
+        sha1: a72a5181124baf64bcd0e68a8726e65914473b3b

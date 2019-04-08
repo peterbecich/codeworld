@@ -1,0 +1,7 @@
+resolver: lts-8.22
+
+packages:
+  - .
+
+extra-deps:
+  - deepseq-1.4.4.0

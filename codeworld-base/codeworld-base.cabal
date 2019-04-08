@@ -32,6 +32,7 @@ Library
                        bytestring,
                        codeworld-error-sanitizer,
                        codeworld-api,
+                       deepseq,
                        ghc-prim,
                        ghcjs-base,
                        ghcjs-dom,

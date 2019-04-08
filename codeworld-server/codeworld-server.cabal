@@ -16,7 +16,7 @@ Executable codeworld-server
   Main-is: Main.hs
 
   Build-depends:
-    aeson,
+    aeson >= 1.4,
     base,
     base64-bytestring,
     bytestring,
