@@ -1,4 +1,4 @@
-resolver: lts-8.22
+resolver: lts-13.17
         
 packages:
   - .
@@ -7,6 +7,7 @@ allow-newer: true
 
 extra-deps:
   # - blank-canvas-0.6.3
+  - hindent-5.2.7
   - filesystem-trees-0.1.0.6
   - kansas-comet-0.4
   - cond-0.4.1.1
