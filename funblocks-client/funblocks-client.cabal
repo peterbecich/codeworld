@@ -23,8 +23,15 @@ Executable funblocks-client
   Hs-source-dirs:      src
   Main-is:             Main.hs
   Default-language:    Haskell2010
-  Build-depends:       ghcjs-base,
-                       text,
-                       containers,
-                       ghcjs-dom,
-                       mtl
+  if impl(ghcjs)
+    Build-depends:       ghcjs-base,
+                         text,
+                         containers,
+                         ghcjs-dom,
+                         mtl
+  if !impl(ghcjs)
+    Build-depends:       ghcjs-base-stub,
+                         text,
+                         containers,
+                         ghcjs-dom,
+                         mtl

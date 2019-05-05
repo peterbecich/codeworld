@@ -14,5 +14,6 @@ before_install:
 
 script:
   - df -h
-  - cd codeworld-server
-  - stack build --fast
+  - stack build
+  - cd codeworld-base
+  - stack build

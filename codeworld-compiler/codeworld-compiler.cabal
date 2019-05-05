@@ -26,6 +26,8 @@ Executable codeworld-compiler
     temporary,
     text
 
+  Default-Language: Haskell2010
+
 Library
   Exposed-modules:
     CodeWorld.Compile,
@@ -42,7 +44,7 @@ Library
     CodeWorld.Compile.Stages
 
   Build-depends:
-    aeson >= 1.4,
+    aeson,
     array,
     base,
     base64-bytestring,
@@ -55,7 +57,7 @@ Library
     filepath,
     hashable,
     haskell-src-exts >= 1.20,
-    megaparsec >= 7.0.0 && < 8.0.0,
+    megaparsec,
     memory,
     mtl,
     process,
@@ -71,6 +73,7 @@ Library
   Hs-source-dirs: src
 
   Exposed: True
+  Default-Language: Haskell2010
 
 Test-Suite codeworld-compiler-test
   Type:               exitcode-stdio-1.0
@@ -85,3 +88,4 @@ Test-Suite codeworld-compiler-test
     filepath,
     HUnit,
     containers == 0.5.*
+  Default-Language: Haskell2010

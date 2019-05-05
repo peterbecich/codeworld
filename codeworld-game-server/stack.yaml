@@ -1,12 +1,14 @@
-resolver: lts-8.22
+resolver: lts-13.19
         
 packages:
   - .
-  - ../codeworld-api
-  - ../codeworld-game-api
 
-allow-newer: true
+allow-newer: false
 
 extra-deps:
-  # - blank-canvas-0.6.3
+  - blank-canvas-0.6.3
   - kansas-comet-0.4
+  - containers-0.5.11.0
+  - network-2.6.3.6
+  - ../codeworld-api
+  - ../codeworld-game-api

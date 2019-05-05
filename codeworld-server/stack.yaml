@@ -1,20 +1,18 @@
-resolver: lts-13.17
+resolver: lts-13.19
         
 packages:
   - .
+  - ../codeworld-account
+  - ../codeworld-auth
+  - ../codeworld-compiler
+  - ../codeworld-error-sanitizer
 
 allow-newer: true
 
 extra-deps:
   - hindent-5.2.7
   - filesystem-trees-0.1.0.6
-  - kansas-comet-0.4
-  - cond-0.4.1.1
+  - containers-0.5.11.0
+  - directory-1.2.7.1
+  - time-1.7.0.1
   - jwt-0.9.0
-  - megaparsec-7.0.4
-  - parser-combinators-1.0.2
-  - aeson-1.4.2.0
-  - ../codeworld-account
-  - ../codeworld-auth
-  - ../codeworld-compiler
-  - ../codeworld-error-sanitizer

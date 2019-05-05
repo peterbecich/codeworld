@@ -1,7 +1,7 @@
-resolver: lts-13.15
+resolver: lts-13.19
 
 packages:
   - .
+  - ../codeworld-error-sanitizer
 
-extra-deps:
-  - ../codeworld-error-sanitizer  
+extra-deps: []
