@@ -5,7 +5,17 @@ cache:
   directories:
   - $HOME/.stack
   - .stack-work
+  - codeworld-account/.stack-work
+  - codeworld-api/.stack-work
+  - codeworld-auth/.stack-work
   - codeworld-base/.stack-work
+  - codeworld-compiler/.stack-work
+  - codeworld-error-sanitizer/.stack-work
+  - codeworld-game-api/.stack-work
+  - codeworld-game-server/.stack-work
+  - codeworld-prediction/.stack-work
+  - codeworld-server/.stack-work
+  - funblocks-client/.stack-work
 
 before_install:
 # Download and unpack the stack executable
@@ -16,7 +26,17 @@ before_install:
 
 env:
   - DIR=.
+  - DIR=codeworld-account
+  - DIR=codeworld-api
+  - DIR=codeworld-auth
   - DIR=codeworld-base
+  - DIR=codeworld-compiler
+  - DIR=codeworld-error-sanitizer
+  - DIR=codeworld-game-api
+  - DIR=codeworld-game-server
+  - DIR=codeworld-prediction
+  - DIR=codeworld-server
+  - DIR=funblocks-client
 
 script:
   - df -h
