@@ -22,3 +22,4 @@ script:
   - df -h
   - cd $DIR
   - stack build
+  - stack test
