@@ -118,7 +118,7 @@ renderHelper signer issuer issuedAt expiresAt (UserId userIdRaw) extraClaims = d
             , iat = Just issuedAtNum
             , unregisteredClaims = ClaimsMap extraClaims
             }
-    return $ encodeSigned signer mempty claimsSet
+    return $ encodeSigned signer claimsSet
    
 
 parseAccessToken :: Signer -> Text -> Maybe AccessToken
