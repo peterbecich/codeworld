@@ -208,8 +208,6 @@ checkRule (NotThis rule) = do
         Just _ -> success
         Nothing -> abort
 
-checkRule _ = abort
-
 allDefinitionsOf :: String -> Module SrcSpanInfo -> [Rhs SrcSpanInfo]
 allDefinitionsOf a m = everything (++) (mkQ [] funcDefs) m ++
                        everything (++) (mkQ [] patDefs) m

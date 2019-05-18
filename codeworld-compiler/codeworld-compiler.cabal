@@ -87,5 +87,5 @@ Test-Suite codeworld-compiler-test
     test-framework-hunit,
     filepath,
     HUnit,
-    containers == 0.5.*
+    containers
   Default-Language: Haskell2010
