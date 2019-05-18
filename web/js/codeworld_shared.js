@@ -116,6 +116,16 @@ const hintBlacklist = [
     'rose'
 ];
 
+function definePanelExtension() {
+    CodeMirror.defineExtension('addPanel', function(node) {
+        const originWrapper = this.getWrapperElement();
+        const wrapper = document.createElement('div');
+        originWrapper.parentNode.insertBefore(wrapper, originWrapper);
+        wrapper.appendChild(originWrapper);
+        wrapper.insertBefore(node, wrapper.firstChild);
+    });
+}
+
 // codeWorldSymbols is variable containing annotations and documentation
 // of builtin and user-defined variables.
 // Expected format:
@@ -224,39 +234,74 @@ function parseSymbolsFromCurrentCode() {
 }
 
 function renderDeclaration(decl, keyword, keywordData, maxLen, argIndex = -1) {
-    if (keywordData.symbolStart > 0) {
-        decl.appendChild(document.createTextNode(
-            keywordData.declaration.slice(0, keywordData.symbolStart)));
-    }
+    let column = 0;
 
-    const wordElem = document.createElement('span');
-    wordElem.className = 'hint-word';
-    wordElem.appendChild(document.createTextNode(keyword));
-    decl.appendChild(wordElem);
+    function addSegment(text, isWord, isBold) {
+        function addSpan(content, wrappable) {
+            const span = document.createElement('span');
+            if (isWord) span.className = 'hint-word';
+            if (isBold) span.style.fontWeight = 'bold';
+            if (!wrappable) span.style.whiteSpace = 'nowrap';
+            span.appendChild(document.createTextNode(content));
+            decl.appendChild(span);
+            column += content.length;
+        }
 
-    let leftover = "";
-    if (keywordData.symbolEnd < keywordData.declaration.length) {
-        leftover = keywordData.declaration.slice(keywordData.symbolEnd).replace(
-            /\s+/g, ' ');
-        if (keywordData.symbolEnd + leftover.length > maxLen && leftover.length >
-            3) {
-            leftover = `${leftover.slice(0, maxLen - 3 - keywordData.symbolEnd) 
-            }...`;
+        function trimFromTail(excess) {
+            const tailLen = decl.lastChild.textContent.length;
+            if (tailLen <= excess) {
+                decl.removeChild(decl.lastChild);
+                trimFromTail(excess - tailLen);
+            } else {
+                decl.lastChild.textContent =
+                    decl.lastChild.textContent.slice(0, tailLen - excess);
+            }
+        }
+
+        const SYM = /^([:!#$%&*+./<=>?@\\^|~-]+)[^:!#$%&*+./<=>?@\\^|~-].*/;
+        const NONSYM = /^([^:!#$%&*+./<=>?@\\^|~-]+)[:!#$%&*+./<=>?@\\^|~-].*/;
+        while (text.length > 0) {
+            const sym = SYM.exec(text);
+            const split = sym || NONSYM.exec(text) || [text, text];
+
+            addSpan(split[1], !sym);
+            text = text.slice(split[1].length);
+        }
+
+        if (column > maxLen) {
+            trimFromTail(column - maxLen + 3);
+            addSpan('...', false);
         }
     }
-    if (argIndex >= 0) {
-        const [head, args, tail] = (/^(\s*::\s*[(]*)([\w,\s]*)([)]*\s*->.*)$/).exec(leftover).slice(1);
-        let tokens = args.split(",");
-        argIndex = Math.min(argIndex, tokens.length - 1);
-        tokens[argIndex] = `<strong>${tokens[argIndex]}</strong>`;
-        leftover = `${head}${tokens.join(',')}${tail}`;
+
+    if (keywordData.symbolStart > 0) {
+        addSegment(keywordData.declaration.slice(0, keywordData.symbolStart));
     }
 
+    addSegment(keyword, true, false);
 
-    if (leftover.length) {
-        const argElem = document.createElement('span');
-        argElem.innerHTML = leftover;
-        decl.appendChild(argElem);
+    if (keywordData.symbolEnd < keywordData.declaration.length) {
+        const leftover = keywordData.declaration.slice(keywordData.symbolEnd).replace(
+            /\s+/g, ' ');
+        if (argIndex >= 0) {
+            // TODO: use a more sophisticated parser to fetch arguments,
+            // and remove unnecessary subsequent checks.
+            const parsedFunction = (/^(\s*::\s*[(]?)([\w,\s]*)([)]?\s*->.*)$/).exec(leftover);
+            if (!parsedFunction || parsedFunction.length <= 1) return null;
+
+            const [head, args, tail] = parsedFunction.slice(1);
+            const tokens = args.split(',');
+            argIndex = Math.min(argIndex, tokens.length - 1);
+
+            addSegment(head, false, false);
+            for (let i = 0; i < tokens.length; i++) {
+                if (i > 0) addSegment(',', false, false);
+                addSegment(tokens[i], false, argIndex == i);
+            }
+            addSegment(tail, false, false);
+        } else {
+            addSegment(leftover, false, false);
+        }
     }
     return decl;
 }
@@ -529,9 +574,9 @@ const Auth = (() => {
     const mine = {};
 
     function initLocalAuth() {
-        Promise.resolve($.getScript('/js/codeworld_local_auth.js'))
+        Promise.resolve($.getScript('js/codeworld_local_auth.js'))
             .then(() => onAuthInitialized(LocalAuth.init()))
-            .catch(e => console.log('initLocalAuth failed'));
+            .catch(e => console.log('initLocalAuth failed', e));
     }
 
     function initGoogleAuth() {
@@ -1224,13 +1269,16 @@ function printMessage(type, message) {
 
     messageContent.innerHTML = '';
 
+    let firstLine;
     if (lines.length < 2) {
         const singleLineMsg = document.createElement('div');
         singleLineMsg.innerHTML = formatted;
         messageContent.appendChild(singleLineMsg);
+        firstLine = messageContent;
     } else {
         const summary = document.createElement('summary');
         summary.innerHTML = lines[0];
+        firstLine = summary;
 
         const details = document.createElement('details');
         details.setAttribute('open', '');
@@ -1240,8 +1288,42 @@ function printMessage(type, message) {
         messageContent.appendChild(details);
     }
 
+    if (type === 'error' || type === 'warning') {
+        const reportLink = document.createElement('a');
+        reportLink.setAttribute('href', '#');
+        reportLink.classList.add('report-unhelpful');
+        reportLink.onclick = event => sendUnhelpfulReport(event, message);
+        reportLink.innerText = 'Not helpful?';
+        firstLine.appendChild(reportLink);
+    }
+
     outputDiv.appendChild(box);
     outputDiv.scrollTop = outputDiv.scrollHeight;
+}
+
+function sendUnhelpfulReport(event, message) {
+    sweetAlert({
+        title: Alert.title('Report unhelpful message:', 'mdi-flag-variant'),
+        text: 'The report will include your code.',
+        input: 'textarea',
+        inputPlaceholder: 'Anything else to add?',
+        showConfirmButton: true,
+        showCancelButton: true
+    }).then(result => {
+        if (!result || result.dismiss !== sweetAlert.DismissReason.confirm) return;
+
+        const data = new FormData();
+        let report = window.location.href;
+        if (result.value) report += '\n' + result.value;
+        report += '\n' + message;
+        data.append('message', report);
+        sendHttp('POST', 'log', data);
+        sweetAlert({
+            type: 'success',
+            text: 'Thank you for your feedback.'
+        });
+    });
+    event.preventDefault();
 }
 
 function clearMessages() {

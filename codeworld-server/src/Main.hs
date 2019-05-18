@@ -67,6 +67,8 @@ import System.Directory
 import System.FileLock
 import System.FilePath
 import System.IO.Temp
+import System.Log.FastLogger
+import System.Log.FastLogger.Date
 
 import Model
 import Util
@@ -81,7 +83,8 @@ data Context = Context {
     authConfig :: AuthConfig,
     compileSem :: MSem Int,
     errorSem :: MSem Int,
-    baseSem :: MSem Int
+    baseSem :: MSem Int,
+    userReportLogger :: TimedFastLogger
     }
 
 main :: IO ()
@@ -92,10 +95,13 @@ main = do
 
 makeContext :: IO Context
 makeContext = do
+    timeCache <- newTimeCache simpleTimeFormat
+    let logType = LogFileNoRotate ("data" </> "user_reports.log") 0
     ctx <- Context <$> (getAuthConfig =<< getCurrentDirectory)
                    <*> MSem.new maxSimultaneousCompiles
                    <*> MSem.new maxSimultaneousErrorChecks
                    <*> MSem.new 1
+                   <*> (fst <$> newTimedFastLogger timeCache logType)
     putStrLn $ "Authentication method: " ++ authMethod (authConfig ctx)
     return ctx
 
@@ -166,6 +172,7 @@ site ctx =
             , ("funblocks", serveFile "web/blocks.html")
             , ("indent", indentHandler ctx)
             , ("gallery/:shareHash", galleryHandler ctx)
+            , ("log", logHandler ctx)
             ]
             ++ authRoutes (authConfig ctx)
     in route routes <|> serveDirectory "web"
@@ -515,18 +522,30 @@ galleryItemFromProject mode@(BuildMode modeName) folder name = do
     let projectId = nameToProjectId name
     let file = folder </> projectFile projectId
     Just project <- decode <$> LB.readFile file
+
     let source = T.encodeUtf8 $ projectSource project
     let programId = sourceToProgramId source
     let deployId = sourceToDeployId source
+
     liftIO $ withProgramLock mode programId $ do
         ensureSourceDir mode programId
         B.writeFile (sourceRootDir mode </> sourceFile programId) source
         writeDeployLink mode deployId programId
-    return GalleryItem { galleryItemName = name,
-                         galleryItemURL = "https://code.world/run.html" <>
-                                          "?mode=" <> T.pack modeName <>
-                                          "&dhash=" <> unDeployId deployId,
-                         galleryItemCode = Nothing }
+
+    let baseURL = "/" <> if modeName == "codeworld" then "" else T.pack modeName
+
+    return GalleryItem {
+        galleryItemName = name,
+        galleryItemURL = "run.html" <>
+                         "?mode=" <> T.pack modeName <>
+                         "&dhash=" <> unDeployId deployId,
+        galleryItemCode = Just (baseURL <> "#" <> unProgramId programId) }
+
+logHandler :: CodeWorldHandler
+logHandler = public $ \ctx -> do
+    Just message <- getParam "message"
+    let logLine t = "[" <> toLogStr t <> "] " <> toLogStr message <> "\n"
+    liftIO $ userReportLogger ctx logLine
 
 responseCodeFromCompileStatus :: CompileStatus -> Int
 responseCodeFromCompileStatus CompileSuccess = 200
@@ -553,7 +572,7 @@ compileIncrementally ctx mode programId = do
             let target = buildRootDir mode </> targetFile programId
             let result = buildRootDir mode </> resultFile programId
             let baseVer = buildRootDir mode </> baseVersionFile programId
-            let baseURL = "/runBaseJS?version=" ++ T.unpack ver
+            let baseURL = "runBaseJS?version=" ++ T.unpack ver
             let stage = UseBase target (baseSymbolFile ver) baseURL
 
             status <- compileSource stage source result (getMode mode) False

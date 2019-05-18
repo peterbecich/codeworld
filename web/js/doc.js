@@ -17,30 +17,47 @@
 
 window.env = parent;
 const params = new URLSearchParams(window.location.search);
+
 let position = {
     scrollLeft: 0,
     scrollTop: 0,
     path: params.get('path')
 };
 
+function getPositionKey() {
+    const shelf = params.get('shelf');
+    if (shelf) {
+        return `guide.position.${shelf}`;
+    } else {
+        return 'guide.default-position';
+    }
+}
+
 function savePosition() {
-    sessionStorage.setItem('position', JSON.stringify(position));
+    sessionStorage.setItem(getPositionKey(), JSON.stringify(position));
 }
 
 function loadPosition() {
-    const savedPosition = sessionStorage.getItem('position');
+    const savedPosition = sessionStorage.getItem(getPositionKey());
     if (savedPosition && savedPosition !== 'undefined') {
         position = JSON.parse(savedPosition);
     }
 }
+
+function setTheme(el) {
+    if (params.get('theme')) {
+        el.classList.add(params.get('theme'));
+    }
+}
+
 window.onscroll = event => {
     position.scrollLeft = event.target.scrollingElement.scrollLeft;
     position.scrollTop = event.target.scrollingElement.scrollTop;
 };
-window.onload = () => {
-    loadPosition();
-};
+
 (() => {
+    loadPosition();
+
     let shelf = {};
     const contents = {};
 
@@ -111,8 +128,8 @@ window.onload = () => {
             iframe.setAttribute('scrolling', 'no');
 
             iframe.addEventListener('load', e => {
-               
-                let currentTarget = e.currentTarget;
+
+                const currentTarget = e.currentTarget;
                 const contentWindow = currentTarget.contentWindow;
 
                 contentWindow.setParent(parent);
@@ -136,6 +153,7 @@ window.onload = () => {
         const contents = document.createElement('div');
         contents.id = 'helpcontents';
         contents.classList.add('contents');
+        setTheme(contents);
 
         const elems = body.getElementsByTagName('*');
 
@@ -230,6 +248,7 @@ window.onload = () => {
 
     function setContent(elem) {
         const help = document.getElementById('help');
+        setTheme(help);
         while (help.firstChild) {
             help.removeChild(help.firstChild);
         }
@@ -304,6 +323,7 @@ window.onload = () => {
 
         const acc = document.createElement('div');
         acc.id = 'helpacc';
+        setTheme(acc);
 
         let paneNum = 0;
         for (const doc in shelf.named) {
