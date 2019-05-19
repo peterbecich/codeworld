@@ -1,4 +1,5 @@
 sudo: false
+dist: xenial
 
 # Caching so the next build will be fast too.
 cache:
@@ -42,5 +43,5 @@ env:
 script:
   - df -h
   - cd $DIR
-  - stack build --fast --only-dependencies
+  # - stack build --fast --only-dependencies
   # - stack test
