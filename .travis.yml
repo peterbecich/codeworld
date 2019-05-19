@@ -4,6 +4,7 @@ sudo: false
 cache:
   directories:
   - $HOME/.stack
+  - $HOME/.local/bin
   - .stack-work
   - codeworld-account/.stack-work
   - codeworld-api/.stack-work
@@ -41,5 +42,5 @@ env:
 script:
   - df -h
   - cd $DIR
-  - stack build --fast
+  - stack build --fast --only-dependencies
   # - stack test
