@@ -43,5 +43,5 @@ env:
 script:
   - df -h
   - cd $DIR
-  # - stack build --fast --only-dependencies
+  - stack build --fast --only-dependencies
   # - stack test
