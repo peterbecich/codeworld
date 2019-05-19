@@ -1,28 +1,155 @@
-# This is a simple Azure configuration, which is intended for use
-# on applications which do not require cross-platform and
-# multiple-GHC-version support. For more information and other
-# options, see:
-#
-# https://docs.haskellstack.org/en/stable/azure_ci/
-#
-# Copy these contents into the root directory of your Github project in a file
-# named azure-pipelines.yml
-
-# Choose a agent virtual image
-pool:
-  vmImage: ubuntu-16.04
-
-steps:
-- script: |
-    mkdir -p ~/.local/bin
-    curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-  displayName: Install Stack
-- script: |
-    export PATH=$HOME/.local/bin:$PATH
-    stack --no-terminal --install-ghc test --only-dependencies
-  displayName: Build Dependencies
-- script: |
-    export PATH=$HOME/.local/bin:$PATH
-    # Build the package, its tests, and its docs and run the tests
-    stack test --haddock --no-haddock-deps
-  displayName: Test Package
+jobs:
+  - job: codeworld_account
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-account
+          stack build
+          stack test
+  - job: codeworld_api
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-api
+          stack build
+          stack test
+  - job: codeworld_auth
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-auth
+          stack build
+          stack test
+  - job: codeworld_base
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-base
+          stack build
+          stack test
+  - job: codeworld_compiler
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-compiler
+          stack build
+          stack test
+  - job: codeworld_error_sanitizer
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-error-sanitizer
+          stack build
+          stack test
+  - job: codeworld_game_api
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-game-api
+          stack build
+          stack test
+  - job: codeworld_game_server
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-game-server
+          stack build
+          stack test
+  - job: codeworld_prediction
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-prediction
+          stack build
+          stack test
+  - job: codeworld_server
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-server
+          stack build
+          stack test
+  - job: funblocks_client
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          mkdir -p ~/.local/bin
+          curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+          export PATH=$HOME/.local/bin:$PATH          
+        displayName: Install Stack
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd funblocks-client
+          stack build
+          stack test
