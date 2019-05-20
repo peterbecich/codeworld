@@ -53,8 +53,16 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
+      # - script: |
+      #     sudo apt-get -y install cabal-install
+      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
+      #     cd ghcjs
+      #     git submodule update --init --recursive
+      #     cabal update
+      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
+          ./install.sh
           cd codeworld-base
           stack setup
           stack build
@@ -68,8 +76,16 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
+      # - script: |
+      #     sudo apt-get -y install cabal-install
+      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
+      #     cd ghcjs
+      #     git submodule update --init --recursive
+      #     cabal update
+      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
+          ./install.sh
           cd codeworld-compiler
           stack setup
           stack build
@@ -143,8 +159,16 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
+      # - script: |
+      #     sudo apt-get -y install cabal-install
+      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
+      #     cd ghcjs
+      #     git submodule update --init --recursive
+      #     cabal update
+      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
+          ./install.sh
           cd codeworld-server
           stack setup
           stack build
@@ -158,6 +182,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
+      - script: |
+          sudo apt-get -y install cabal-install
+          git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
+          cabal update
+          cabal install ./ghcjs
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd funblocks-client
