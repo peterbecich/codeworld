@@ -45,6 +45,7 @@ jobs:
           stack build
           stack test
   - job: codeworld_base
+    timeoutInMinutes: 1800
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -68,6 +69,7 @@ jobs:
           stack build
           stack test
   - job: codeworld_compiler
+    timeoutInMinutes: 1800
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -151,6 +153,7 @@ jobs:
           stack build
           stack test
   - job: codeworld_server
+    timeoutInMinutes: 1800
     pool:
       vmImage: ubuntu-16.04
     steps:
