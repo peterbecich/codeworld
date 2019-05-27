@@ -13,7 +13,12 @@ jobs:
           cd codeworld-account
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-account
           stack test
+        displayName: Stack test
   - job: codeworld_api
     pool:
       vmImage: ubuntu-16.04
@@ -28,7 +33,12 @@ jobs:
           cd codeworld-api
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-api
           stack test
+        displayName: Stack test
   - job: codeworld_auth
     pool:
       vmImage: ubuntu-16.04
@@ -43,7 +53,12 @@ jobs:
           cd codeworld-auth
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-auth
           stack test
+        displayName: Stack test
   - job: codeworld_base
     timeoutInMinutes: 1800
     pool:
@@ -54,20 +69,17 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
-      # - script: |
-      #     sudo apt-get -y install cabal-install
-      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
-      #     cd ghcjs
-      #     git submodule update --init --recursive
-      #     cabal update
-      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
-          ./install.sh
           cd codeworld-base
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-base
           stack test
+        displayName: Stack test
   - job: codeworld_compiler
     timeoutInMinutes: 1800
     pool:
@@ -78,20 +90,17 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
-      # - script: |
-      #     sudo apt-get -y install cabal-install
-      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
-      #     cd ghcjs
-      #     git submodule update --init --recursive
-      #     cabal update
-      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
-          ./install.sh
           cd codeworld-compiler
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-compiler
           stack test
+        displayName: Stack test
   - job: codeworld_error_sanitizer
     pool:
       vmImage: ubuntu-16.04
@@ -106,7 +115,12 @@ jobs:
           cd codeworld-error-sanitizer
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-error-sanitizer
           stack test
+        displayName: Stack test
   - job: codeworld_game_api
     pool:
       vmImage: ubuntu-16.04
@@ -121,7 +135,12 @@ jobs:
           cd codeworld-game-api
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-game-api
           stack test
+        displayName: Stack test
   - job: codeworld_game_server
     pool:
       vmImage: ubuntu-16.04
@@ -136,7 +155,12 @@ jobs:
           cd codeworld-game-server
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-game-server
           stack test
+        displayName: Stack test
   - job: codeworld_prediction
     pool:
       vmImage: ubuntu-16.04
@@ -151,7 +175,12 @@ jobs:
           cd codeworld-prediction
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-prediction
           stack test
+        displayName: Stack test
   - job: codeworld_server
     timeoutInMinutes: 1800
     pool:
@@ -162,20 +191,17 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
-      # - script: |
-      #     sudo apt-get -y install cabal-install
-      #     git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
-      #     cd ghcjs
-      #     git submodule update --init --recursive
-      #     cabal update
-      #     cabal install
       - script: |
           export PATH=$HOME/.local/bin:$PATH
-          ./install.sh
           cd codeworld-server
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd codeworld-server
           stack test
+        displayName: Stack test
   - job: funblocks_client
     pool:
       vmImage: ubuntu-16.04
@@ -186,13 +212,13 @@ jobs:
           export PATH=$HOME/.local/bin:$PATH          
         displayName: Install Stack
       - script: |
-          sudo apt-get -y install cabal-install
-          git clone -b ghc-8.0 https://github.com/ghcjs/ghcjs.git
-          cabal update
-          cabal install ./ghcjs
-      - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd funblocks-client
           stack setup
           stack build
+        displayName: Stack build
+      - script: |
+          export PATH=$HOME/.local/bin:$PATH
+          cd funblocks-client
           stack test
+        displayName: Stack test

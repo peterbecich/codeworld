@@ -2395,12 +2395,14 @@ prependIfChanged f (x:xs, ys)
     | identical x x' = (x:xs, ys)
     | otherwise = (x':x:xs, ys)
     where x' = f x
+prependIfChanged _ tup = tup
 
 debugSimulationOf initial simStep simDraw =
     runInspect statefulDebugControls ([initial],[]) step (\_ r -> r) draw
   where
     step dt = prependIfChanged (simStep dt)
     draw (x:_, _) = simDraw x
+    draw _ = blank
 
 debugInteractionOf initial baseStep baseEvent baseDraw = 
   runInspect statefulDebugControls ([initial], []) step event draw 
@@ -2408,6 +2410,7 @@ debugInteractionOf initial baseStep baseEvent baseDraw =
     step dt = prependIfChanged (baseStep dt)
     event e = prependIfChanged (baseEvent e)
     draw (x:_, _) = baseDraw x
+    draw _        = blank
 
 debugActivityOf initial change picture =
     debugInteractionOf initial (const id) change picture
