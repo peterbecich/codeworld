@@ -375,8 +375,8 @@ coordinatePlaneDrawer :: MonadCanvas m => Drawer m
 coordinatePlaneDrawing :: MonadCanvas m => Drawing m
 coordinatePlaneDrawing = pictureToDrawing $ axes <> numbers <> guidelines
   where
-    xline y = thickPolyline 0.01 [(-10, y), (10, y)]
-    xaxis = thickPolyline 0.03 [(-10, 0), (10, 0)]
+    xline y = colored (RGBA 0 0 0 0.25) $ polyline [(-10, y), (10, y)]
+    xaxis = colored (RGBA 0 0 0 0.75) $ polyline [(-10, 0), (10, 0)]
     axes = xaxis <> rotated (pi / 2) xaxis
     xguidelines = pictures [xline k | k <- [-10,-9 .. 10]]
     guidelines = xguidelines <> rotated (pi / 2) xguidelines
@@ -1164,9 +1164,13 @@ getMousePos canvas = do
         cx <- ClientRect.getLeft rect
         cy <- ClientRect.getTop rect
         cw <- ClientRect.getWidth rect
+        ch <- ClientRect.getHeight rect
+        let unitLen = min cw ch / 20
+        let mx = round (cx + cw / 2)
+        let my = round (cy + ch / 2)
         return
-            ( 20 * fromIntegral (ix - round cx) / realToFrac cw - 10
-            , 20 * fromIntegral (round cy - iy) / realToFrac cw + 10)
+            ( fromIntegral (ix - mx) / realToFrac unitLen
+            , fromIntegral (my - iy) / realToFrac unitLen)
 
 onEvents :: Element -> (Event -> IO ()) -> IO ()
 onEvents canvas handler = do
@@ -1738,9 +1742,11 @@ replaceDrawNode n with drawing = either Just (const Nothing) $ go n drawing
 
 getMousePos :: (Int, Int) -> (Double, Double) -> (Double, Double)
 getMousePos (w, h) (x, y) =
-    ((x - fromIntegral w / 2) / s, -(y - fromIntegral h / 2) / s)
+    ((x - mx) / realToFrac unitLen, (my - y) / realToFrac unitLen)
   where
-    s = min (realToFrac w / 20) (realToFrac h / 20)
+    unitLen = min (fromIntegral w) (fromIntegral h) / 20
+    mx = fromIntegral w / 2
+    my = fromIntegral h / 2
 
 toEvent :: (Int, Int) -> Canvas.Event -> Maybe Event
 toEvent rect Canvas.Event {..}

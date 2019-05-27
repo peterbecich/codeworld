@@ -145,9 +145,7 @@ userProjectDir :: BuildMode -> UserId -> FilePath
 userProjectDir mode (UserId userIdRaw) = projectRootDir mode </> userIdRaw
 
 projectBase :: ProjectId -> FilePath
-projectBase (ProjectId p) =
-    let s = T.unpack p
-    in take 3 s </> s
+projectBase (ProjectId p) = T.unpack p
 
 projectFile :: ProjectId -> FilePath
 projectFile projectId = projectBase projectId <.> "cw"
@@ -162,9 +160,7 @@ nameToProjectId :: Text -> ProjectId
 nameToProjectId = ProjectId . hashToId "S" . T.encodeUtf8
 
 dirBase :: DirId -> FilePath
-dirBase (DirId d) =
-    let s = T.unpack d
-    in take 3 s </> s
+dirBase (DirId d) = T.unpack d
 
 nameToDirId :: Text -> DirId
 nameToDirId = DirId . hashToId "D" . T.encodeUtf8
@@ -205,16 +201,13 @@ ensureProjectDir mode userId path projectId = do
 listDirectoryWithPrefix :: FilePath -> IO [FilePath]
 listDirectoryWithPrefix filePath = map (filePath </>) <$> listDirectory filePath
 
-dirFilter :: [FilePath] -> Char -> IO [FilePath]
-dirFilter dirs char =
-    fmap concat $
-    mapM listDirectoryWithPrefix $
-    filter (\x -> head (takeBaseName x) == char) dirs
+dirFilter :: [FilePath] -> Char -> [FilePath]
+dirFilter dirs char = filter (\x -> head (takeBaseName x) == char) dirs
 
 projectFileNames :: FilePath -> IO [Text]
 projectFileNames dir = do
     subHashedDirs <- listDirectoryWithPrefix dir
-    hashedFiles <- dirFilter subHashedDirs 'S'
+    let hashedFiles = dirFilter subHashedDirs 'S'
     projects <- fmap catMaybes $
         forM hashedFiles $ \f -> do
             exists <- doesFileExist f
@@ -226,7 +219,7 @@ projectFileNames dir = do
 projectDirNames :: FilePath -> IO [Text]
 projectDirNames dir = do
     subHashedDirs <- listDirectoryWithPrefix dir
-    hashedDirs <- dirFilter subHashedDirs 'D'
+    let hashedDirs = dirFilter subHashedDirs 'D'
     dirs <- mapM (\x -> B.readFile $ x </> "dir.info") hashedDirs
     return $ map T.decodeUtf8 dirs
 
@@ -246,17 +239,6 @@ isDir :: FilePath -> IO Bool
 isDir path = do
     status <- getFileStatus path
     return $ isDirectory status
-
-migrateUser :: FilePath -> IO ()
-migrateUser userRoot = do
-    prevContent <-
-        filter (\x -> take 3 (reverse x) == "wc.") <$> listDirectory userRoot
-    mapM_
-        (\x -> createDirectoryIfMissing False $ userRoot </> take 3 x)
-        prevContent
-    mapM_
-        (\x -> renameFile (userRoot </> x) $ userRoot </> take 3 x </> x)
-        prevContent
 
 getFilesRecursive :: FilePath -> IO [FilePath]
 getFilesRecursive path = do
