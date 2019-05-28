@@ -4,5 +4,6 @@ packages:
   - .
 
 extra-deps:
+  - integer-gmp-1.0.2.0
   - blank-canvas-0.6.3
   - kansas-comet-0.4

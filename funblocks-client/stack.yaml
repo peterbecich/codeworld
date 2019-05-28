@@ -3,6 +3,7 @@ packages:
   - .
 
 extra-deps:
+  - integer-gmp-1.0.2.0
   - ghcjs-dom-0.8.0.0
   - ghcjs-dom-jsffi-0.8.0.0
   - github: ghcjs/ghcjs
