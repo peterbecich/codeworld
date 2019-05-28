@@ -9,7 +9,6 @@ packages:
 allow-newer: false
 
 extra-deps:
-  - integer-gmp-1.0.2.0
   - aeson-1.1.1.0
   - scientific-0.3.4.12
   - case-insensitive-1.2.0.8

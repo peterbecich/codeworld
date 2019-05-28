@@ -3,6 +3,3 @@ resolver: lts-13.19
 packages:
 - .
 
-extra-deps:
-  - integer-gmp-1.0.2.0
-
