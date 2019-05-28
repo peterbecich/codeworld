@@ -5,7 +5,6 @@ packages:
   - ../codeworld-error-sanitizer
   - ../codeworld-game-api
   - ../codeworld-prediction
-
   
 allow-newer: false
 
