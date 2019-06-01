@@ -8,11 +8,16 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-account
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-account
+      #     stack setup
+      #   displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-account
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-account
@@ -32,11 +37,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-api
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-api
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-api
@@ -56,11 +61,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-auth
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-auth
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-auth
@@ -81,11 +86,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-base
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-base
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-base
@@ -106,11 +111,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-compiler
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-compiler
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-compiler
@@ -130,11 +135,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-error-sanitizer
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-error-sanitizer
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-error-sanitizer
@@ -154,11 +159,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-game-api
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-game-api
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-game-api
@@ -178,11 +183,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-game-server
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-game-server
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-game-server
@@ -202,11 +207,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-prediction
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-prediction
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-prediction
@@ -227,11 +232,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd codeworld-server
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd codeworld-server
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-server
@@ -251,11 +256,11 @@ jobs:
           curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
           export PATH=$HOME/.local/bin:$PATH
         displayName: Install Stack
-      - script: |
-          export PATH=$HOME/.local/bin:$PATH
-          cd funblocks-client
-          stack setup
-        displayName: Stack setup
+      # - script: |
+      #     export PATH=$HOME/.local/bin:$PATH
+      #     cd funblocks-client
+      #     stack setup
+      #   displayName: Stack setup
       - script: |
           export PATH=$HOME/.local/bin:$PATH
           cd codeworld-account
