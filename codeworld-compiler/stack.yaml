@@ -7,12 +7,19 @@ extra-deps:
   - haskell-src-exts-1.21.0
 
 
-resolver: lts-8.22
-compiler: ghcjs-0.2.1.9008011_ghc-8.0.2
-compiler-check: match-exact
-setup-info:
-  ghcjs:
-    source:
-      ghcjs-0.2.1.9008011_ghc-8.0.2:
-        url: https://github.com/matchwood/ghcjs-stack-dist/raw/master/ghcjs-0.2.1.9008011.tar.gz
-        sha1: a72a5181124baf64bcd0e68a8726e65914473b3b
+resolver: lts-13.26
+# compiler: ghcjs-8.6.0.1_ghc-8.6.2
+# compiler-check: newer-minor
+# setup-info:
+#   ghcjs:
+#     source:
+#       ghcjs-8.6.0.1_ghc-8.6.2:
+#         url: /ghcjs
+
+# docker:
+#     enable: true
+#     repo: "peterbecich/stack-build-ghcjs-8.6" # It will automatically add :lts-x.xx
+#     # auto-pull: true
+#     persist: true
+
+# system-ghc: false
