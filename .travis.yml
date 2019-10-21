@@ -78,20 +78,13 @@ before_install:
 
 script:
   - stack install --resolver lts-14.11 happy-1.19.9 alex
-  - pwd
-  - ls
   - git submodule update --init --recursive
   - cd ghcjs
   - git submodule update --init --recursive
-  - pwd
-  - ls
   - ./utils/makePackages.sh
-  # - cabal new-configure
-  # - cabal new-build
-  - stack --resolver lts-14.11 build
-  - stack --resolver lts-14.11 install
-  - ghcjs-boot
-  - cd ../$MODULE
-  # # - stack setup
-  - stack --resolver lts-14.11 build --fast
-  - if [ $TEST == "true" ]; then stack test --fast; fi
+  # - stack --resolver lts-14.11 build
+  # - stack --resolver lts-14.11 install
+  # - ghcjs-boot
+  # - cd ../$MODULE
+  # - stack --resolver lts-14.11 build --fast
+  # - if [ $TEST == "true" ]; then stack test --fast; fi
