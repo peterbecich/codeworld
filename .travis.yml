@@ -1,10 +1,23 @@
 # https://docs.haskellstack.org/en/stable/travis_ci/
 
+sudo: true
 dist: bionic
 language: generic
+addons:
+  apt:
+    update: true
+# language: haskell
+# cabal: "2.4"
+
+# ghc:
+#   - "8.6.4"
+
 cache:
   directories:
   - $HOME/.stack
+  - $HOME/.ghcjs
+  - $HOME/.ghc
+  - $HOME/.cabal
   - $HOME/codeworld-account/.stack-work
   - $HOME/codeworld-api/.stack-work
   - $HOME/codeworld-auth/.stack-work
@@ -47,9 +60,38 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- sudo add-apt-repository -y ppa:hvr/ghc
+- sudo apt-get update
+- sudo apt-get install -y cabal-install-2.4 ghc-8.6.2
+- ls /opt/ghc/8.6.2/bin/
+- sudo ln -s /opt/cabal/bin/cabal /usr/bin/cabal
+- sudo ln -s /opt/ghc/8.6.2/bin/ghc /usr/bin/ghc
+- sudo ln -s /opt/ghc/8.6.2/bin/ghc-pkg /usr/bin/ghc-pkg
+- sudo ln -s /opt/ghc/8.6.2/bin/haddock /usr/bin/haddock
+- sudo ln -s /opt/ghc/8.6.2/bin/ghci /usr/bin/ghci
+- sudo ln -s /opt/ghc/8.6.2/bin/hpc /usr/bin/hpc
+- sudo ln -s /opt/ghc/8.6.2/bin/runghc /usr/bin/runghc
+- sudo ln -s /opt/ghc/8.6.2/bin/hsc2hs /usr/bin/hsc2hs
+- echo $PATH
+- cabal --version
+- ghc --version
 
 script:
-  - cd $MODULE
-  - stack setup
-  - stack build --fast
+  - stack install --resolver lts-14.11 happy-1.19.9 alex
+  - pwd
+  - ls
+  - git submodule update --init --recursive
+  - cd ghcjs
+  - git submodule update --init --recursive
+  - pwd
+  - ls
+  - ./utils/makePackages.sh
+  # - cabal new-configure
+  # - cabal new-build
+  - stack --resolver lts-14.11 build
+  - stack --resolver lts-14.11 install
+  - ghcjs-boot
+  - cd ../$MODULE
+  # # - stack setup
+  - stack --resolver lts-14.11 build --fast
   - if [ $TEST == "true" ]; then stack test --fast; fi
