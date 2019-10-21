@@ -87,4 +87,4 @@ script:
   - ghcjs-boot
   - cd ../$MODULE
   - stack --resolver lts-14.11 build --fast
-  # - if [ $TEST == "true" ]; then stack test --fast; fi
+  - if [ $TEST == "true" ]; then stack test --fast; fi
