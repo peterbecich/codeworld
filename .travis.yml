@@ -82,7 +82,7 @@ script:
   - cd ghcjs
   - git submodule update --init --recursive
   - ./utils/makePackages.sh
-  # - stack --resolver lts-14.11 build
+  - stack --resolver lts-14.11 build
   # - stack --resolver lts-14.11 install
   # - ghcjs-boot
   # - cd ../$MODULE
