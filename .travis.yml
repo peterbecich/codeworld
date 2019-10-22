@@ -18,6 +18,7 @@ cache:
   - $HOME/.ghcjs
   - $HOME/.ghc
   - $HOME/.cabal
+  - $HOME/ghcjs/
   - $HOME/codeworld-account/.stack-work
   - $HOME/codeworld-api/.stack-work
   - $HOME/codeworld-auth/.stack-work
@@ -82,9 +83,11 @@ script:
   - cd ghcjs
   - git submodule update --init --recursive
   - ./utils/makePackages.sh
-  - stack --resolver lts-14.11 build
-  - stack --resolver lts-14.11 install
-  - ghcjs-boot
+  - cabal install --only-dependencies --enable-tests --enable-benchmarks
+  - cabal install --enable-tests --enable-benchmarks -v --ghc-options="+RTS -c -RTS"
+  - ghcjs --version
+  - ghcjs-boot --version
+  # - ghcjs-boot
   - cd ../$MODULE
-  - stack --resolver lts-14.11 build --fast
-  - if [ $TEST == "true" ]; then stack test --fast; fi
+  # - stack --resolver lts-14.11 build --fast
+  # - if [ $TEST == "true" ]; then stack test --fast; fi
