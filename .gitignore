@@ -24,4 +24,3 @@ dist-*
 *.prof
 *.swp
 .stack-work
-stack.yaml.lock
