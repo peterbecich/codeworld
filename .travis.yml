@@ -3,14 +3,6 @@
 sudo: true
 dist: bionic
 language: generic
-addons:
-  apt:
-    update: true
-# language: haskell
-# cabal: "2.4"
-
-# ghc:
-#   - "8.6.4"
 
 cache:
   directories:
@@ -29,9 +21,20 @@ cache:
   - $HOME/.ghcjs
   - $HOME/.ghc
   - $HOME/.cabal
+  - $TRAVIS_BUILD_DIR/ghcjs/.cabal-sandbox
+  - $TRAVIS_BUILD_DIR/ghcjs/data
+  - $TRAVIS_BUILD_DIR/ghcjs/dist
+  - $TRAVIS_BUILD_DIR/ghcjs/dist-newstyle
+  - $TRAVIS_BUILD_DIR/ghcjs/ghcjs-boot
+  - $TRAVIS_BUILD_DIR/ghcjs/lib
+  - $TRAVIS_BUILD_DIR/ghcjs/lib/boot/data
+  - $TRAVIS_BUILD_DIR/ghcjs/lib/boot/pkg
+  - $TRAVIS_BUILD_DIR/ghcjs/utils
+  - $TRAVIS_BUILD_DIR/ghcjs/vendor
 
 addons:
   apt:
+    update: true
     packages:
       - libgmp-dev
 
@@ -43,169 +46,214 @@ jobs:
         - if [ ! -d "$DIR" ]; then mkdir -p ~/.local/bin; fi
         - export PATH=$HOME/.local/bin:$PATH
         - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-        - stack setup
-    - stage: Build dependencies
-      name: "root"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only
-    - stage: Build dependencies
-      name: "Account"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-account
-    - stage: Build dependencies
-      name: "API"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-api
-    - stage: Build dependencies
-      name: "Auth"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-auth
-    - stage: Build dependencies
-      name: "Compiler"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-compiler
-    - stage: Build dependencies
-      name: "Error Sanitizer"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-error-sanitizer
-    - stage: Build dependencies
-      name: "Game API"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-game-api
-    - stage: Build dependencies
-      name: "Game Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-game-server
-    - stage: Build dependencies
-      name: "Prediction"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-prediction
-    - stage: Build dependencies
-      name: "Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build --dependencies-only codeworld-server
-    - stage: Build
-      name: "root"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build
-    - stage: Build
-      name: "Account"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-account
-    - stage: Build
-      name: "API"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-api
-    - stage: Build
-      name: "Auth"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-auth
-    - stage: Build
-      name: "Compiler"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-compiler
-    - stage: Build
-      name: "Error Sanitizer"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-error-sanitizer
-    - stage: Build
-      name: "Game API"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-game-api
-    - stage: Build
-      name: "Game Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-game-server
-    - stage: Build
-      name: "Prediction"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-prediction
-    - stage: Build
-      name: "Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack build codeworld-server
-    # - stage: Test
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
+    # - stage: Build dependencies
     #   name: "root"
     #   script:
     #     - export PATH=$HOME/.local/bin:$PATH
-    #     - stack test
-    - stage: Test
-      name: "Account"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-account
-    - stage: Test
-      name: "API"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-api
-    - stage: Test
-      name: "Auth"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-auth
-    # - stage: Test
+    #     - stack build --dependencies-only
+    # - stage: Build dependencies
+    #   name: "Account"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-account
+    # - stage: Build dependencies
+    #   name: "API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-api
+    # - stage: Build dependencies
+    #   name: "Auth"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-auth
+    # - stage: Build dependencies
     #   name: "Compiler"
     #   script:
     #     - export PATH=$HOME/.local/bin:$PATH
-    #     - stack test codeworld-compiler
-    - stage: Test
-      name: "Error Sanitizer"
+    #     - stack build --dependencies-only codeworld-compiler
+    # - stage: Build dependencies
+    #   name: "Error Sanitizer"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-error-sanitizer
+    # - stage: Build dependencies
+    #   name: "Game API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-game-api
+    # - stage: Build dependencies
+    #   name: "Game Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-game-server
+    # - stage: Build dependencies
+    #   name: "Prediction"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-prediction
+    # - stage: Build dependencies
+    #   name: "Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build --dependencies-only codeworld-server
+    # - stage: Build
+    #   name: "root"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build
+    # - stage: Build
+    #   name: "Account"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-account
+    # - stage: Build
+    #   name: "API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-api
+    # - stage: Build
+    #   name: "Auth"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-auth
+    # - stage: Build
+    #   name: "Compiler"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-compiler
+    # - stage: Build
+    #   name: "Error Sanitizer"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-error-sanitizer
+    # - stage: Build
+    #   name: "Game API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-game-api
+    # - stage: Build
+    #   name: "Game Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-game-server
+    # - stage: Build
+    #   name: "Prediction"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-prediction
+    # - stage: Build
+    #   name: "Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack build codeworld-server
+    # # - stage: Test
+    # #   name: "root"
+    # #   script:
+    # #     - export PATH=$HOME/.local/bin:$PATH
+    # #     - stack test
+    # - stage: Test
+    #   name: "Account"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-account
+    # - stage: Test
+    #   name: "API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-api
+    # - stage: Test
+    #   name: "Auth"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-auth
+    # # - stage: Test
+    # #   name: "Compiler"
+    # #   script:
+    # #     - export PATH=$HOME/.local/bin:$PATH
+    # #     - stack test codeworld-compiler
+    # - stage: Test
+    #   name: "Error Sanitizer"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-error-sanitizer
+    # - stage: Test
+    #   name: "Game API"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-game-api
+    # - stage: Test
+    #   name: "Game Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-game-server
+    # - stage: Test
+    #   name: "Prediction"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-prediction
+    # - stage: Test
+    #   name: "Server"
+    #   script:
+    #     - export PATH=$HOME/.local/bin:$PATH
+    #     - stack test codeworld-server
+    - stage: Compile, install GHCJS
+      name: "Compile, install GHCJS"
       script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-error-sanitizer
-    - stage: Test
-      name: "Game API"
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get upgrade
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - cabal new-update
+        - cabal new-configure
+        - cabal new-build
+        - cabal new-install --only-dependencies --lib
+        - cabal new-install -v --lib
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - ghcjs --version
+        - ghcjs-boot --version
+    - stage: GHCJS Boot
+      name: "GHCJS Boot"
       script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-game-api
-    - stage: Test
-      name: "Game Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-game-server
-    - stage: Test
-      name: "Prediction"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-prediction
-    - stage: Test
-      name: "Server"
-      script:
-        - export PATH=$HOME/.local/bin:$PATH
-        - stack test codeworld-server
-
-#         - cd ghcjs
-#   - git submodule update --init --recursive
-#   - ./utils/makePackages.sh
-#   - cabal new-update
-#   - cabal new-configure
-#   - cabal new-build
-#   - sudo ln -s $HOME/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-#   - sudo ln -s $HOME/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-#   - sudo ln -s $HOME/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-#   - sudo ln -s $HOME/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-#   - sudo ln -s $HOME/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get upgrade
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - git submodule update --init --recursive
+        - echo $TRAVIS_BUILD_DIR
+        - ls -lha $TRAVIS_BUILD_DIR
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - pwd
+        - ls -lha
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - pwd
+        - ls -lha $TRAVIS_BUILD_DIR/ghcjs/
+        - ls -lha $TRAVIS_BUILD_DIR/ghcjs/data
+        - ls -lha $TRAVIS_BUILD_DIR/ghcjs/lib/boot
+        - find . -name "boot.yaml"
+        - ghcjs --version
+        - ghcjs-boot --version
+        - travis_wait 30 cabal new-install ghcjs-run
+        - ghcjs-boot -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot
 
 # script:
 #   - ghcjs --version
