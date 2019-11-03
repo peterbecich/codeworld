@@ -41,6 +41,8 @@ async function init() {
 
     window.savedGeneration = null;
     window.runningGeneration = null;
+    window.debugAvailable = false;
+    window.debugActive = false;
 
     if (window.location.pathname === '/haskell') {
         window.buildMode = 'haskell';
@@ -145,7 +147,7 @@ function initCodeworld() {
         styleActiveLine: !WURFL || !WURFL.is_mobile,
         showTrailingSpace: true,
         indentWithTabs: false,
-        indentUnit: 4,
+        indentUnit: window.buildMode === 'codeworld' ? 4 : 2,
         autoClearEmptyLines: true,
         highlightSelectionMatches: {
             showToken: /\w/,
@@ -633,12 +635,10 @@ function updateUI() {
         document.getElementById('shareFolderButton').style.display = 'none';
     }
 
-    const debugAvailable = document.getElementById('runner').contentWindow.debugAvailable;
-    const debugActive = document.getElementById('runner').contentWindow.debugActive;
-    if (debugAvailable) {
+    if (window.debugAvailable) {
         document.getElementById('inspectButton').style.display = '';
 
-        if (debugActive) {
+        if (window.debugActive) {
             document.getElementById('inspectButton').style.color = 'black';
         } else {
             document.getElementById('inspectButton').style.color = '';
@@ -808,16 +808,24 @@ function formatSource() {
 
     sendHttp('POST', 'indent', data, request => {
         if (request.status === 200) {
-            codeworldEditor.getDoc().setValue(request.responseText);
+            if (request.responseText !== src) {
+                codeworldEditor.getDoc().setValue(request.responseText);
+            }
+        } else if (request.status === 500) {
+            sweetAlert('Oops!',
+                'Could not format your code.  It may contains errors.',
+                'error');
         }
     });
 }
 
 function stopRun() {
-    if (document.getElementById('runner').contentWindow.debugActive) {
-        document.getElementById('runner').contentWindow.stopDebugMode();
+    if (window.debugActive) {
+        document.getElementById('runner').contentWindow.postMessage({
+            type: 'stopDebug'
+        }, '*');
+        destroyTreeDialog();
     }
-    destroyTreeDialog();
     window.cancelCompile();
 
     run('', '', '', false, null);
@@ -834,22 +842,48 @@ window.addEventListener('message', event => {
                 showRequiredChecksInDialog(msg);
             }, 500);
         }
-    } else if (event.data.type === 'showCanvas') {
+    } else if (event.data.type === 'showGraphics') {
         const runner = document.getElementById('runner');
         runner.style.display = '';
         runner.focus();
         runner.contentWindow.focus();
-        runner.contentWindow.postMessage({type: 'canvasShown'}, '*');
-    } else if (event.data.type === 'message') {
+        runner.contentWindow.postMessage({
+            type: 'graphicsShown'
+        }, '*');
+    } else if (event.data.type === 'consoleOut') {
         if (event.data.str !== '') printMessage(event.data.msgType, event.data.str);
         if (event.data.msgType === 'error') markFailed();
     } else if (event.data.type === 'updateUI') {
         updateUI();
+    } else if (event.data.type === 'debugReady') {
+        window.debugAvailable = true;
+        updateUI();
+    } else if (event.data.type === 'debugActive') {
+        window.debugActive = true;
+        updateUI();
+    } else if (event.data.type === 'debugFinished') {
+        window.debugActive = false;
+        updateUI();
     }
 });
 
+function inspect() {
+    if (window.debugActive) {
+        document.getElementById('runner').contentWindow.postMessage({
+            type: 'stopDebug'
+        }, '*');
+    } else {
+        document.getElementById('runner').contentWindow.postMessage({
+            type: 'startDebug'
+        }, '*');
+    }
+    updateUI();
+}
+
 function run(hash, dhash, msg, error, generation) {
     window.runningGeneration = generation;
+    window.debugAvailable = false;
+    window.debugActive = false;
     window.lastRunMessage = msg;
 
     const runner = document.getElementById('runner');

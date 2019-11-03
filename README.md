@@ -1,6 +1,8 @@
 CodeWorld
 =========
 
+[![Build Status](https://travis-ci.org/google/codeworld.svg?branch=master)](https://travis-ci.org/google/codeworld)
+
 CodeWorld is an educational environment using Haskell. It provides a simple
 mathematical model for geometric figures, animations, and interactive and
 multi-player games.  The web-based programming environment supports this
@@ -24,7 +26,8 @@ There are several variants of CodeWorld available:
 Status
 ======
 
-CodeWorld is stable and has been used in schools for years!  See [the users page](https://github.com/google/codeworld/blob/master/Users.md) for a partial list.
+CodeWorld is stable and has been used in schools for years!  See
+[the users page](https://github.com/google/codeworld/blob/master/docs/Users.md) for a partial list.
 We're constantly improving the environment, though.  Breaking changes, when
 necessary, are scheduled to occur between typical (U.S.) K-12 school
 semesters, to minimize disruption of existing classes.
@@ -87,6 +90,12 @@ If you make changes to CodeWorld, you can rebuild it without rebuilding the depe
 1. Change to the root directory of the project.
 2. Run `./build.sh` to recompile just CodeWorld itself, using previously installed tools and libraries.
 3. Run `./run.sh` to start the server.
+
+### Stack
+
+The `stack.yaml` in the project's root is present to partially support Intero and [Travis CI](https://travis-ci.org/google/codeworld/).  On Travis, `codeworld-compiler` tests do not run; `codeworld-base` and `funblocks-client` are not built or tested.
+
+Building and running CodeWorld locally with Stack is unsupported; Stack cannot yet substitute for the Shell scripts described above.
 
 Caveats
 -------
