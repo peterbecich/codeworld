@@ -197,12 +197,11 @@ jobs:
     #   script:
     #     - export PATH=$HOME/.local/bin:$PATH
     #     - stack test codeworld-server
-    - stage: Compile, install GHCJS
-      name: "Compile, install GHCJS"
+    - stage: Compile GHCJS
+      name: "Compile GHCJS"
       script:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
-        - sudo apt-get upgrade
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
@@ -213,6 +212,18 @@ jobs:
         - cabal new-update
         - cabal new-configure
         - cabal new-build
+    - stage: install GHCJS
+      name: "install GHCJS"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
         - cabal new-install --only-dependencies --lib
         - cabal new-install -v --lib
         - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
@@ -227,7 +238,6 @@ jobs:
       script:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
-        - sudo apt-get upgrade
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
@@ -240,6 +250,7 @@ jobs:
         - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
         - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
         - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
         - pwd
         - ls -lha
         - cd ghcjs
@@ -252,7 +263,7 @@ jobs:
         - find . -name "boot.yaml"
         - ghcjs --version
         - ghcjs-boot --version
-        - travis_wait 30 cabal new-install ghcjs-run
+        # - travis_wait 30 cabal new-install ghcjs-run
         - ghcjs-boot -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot
 
 # script:
