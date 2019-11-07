@@ -220,4 +220,4 @@ jobs:
         - git submodule update --init --recursive
         - ./utils/makePackages.sh
         - ghcjs --version
-        - ghcjs-boot -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock
+        - ghcjs-boot -j 2 -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
