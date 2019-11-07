@@ -197,8 +197,8 @@ jobs:
     #   script:
     #     - export PATH=$HOME/.local/bin:$PATH
     #     - stack test codeworld-server
-    - stage: Compile GHCJS
-      name: "Compile GHCJS"
+    - stage: Build GHCJS dependencies
+      name: "Build GHCJS dependencies"
       script:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
@@ -211,6 +211,19 @@ jobs:
         - ./utils/makePackages.sh
         - cabal new-update
         - cabal new-configure
+        - cabal new-build --only-dependencies
+    - stage: Build GHCJS
+      name: "Build GHCJS"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
         - cabal new-build
     - stage: install GHCJS
       name: "install GHCJS"
@@ -263,8 +276,7 @@ jobs:
         - find . -name "boot.yaml"
         - ghcjs --version
         - ghcjs-boot --version
-        # - travis_wait 30 cabal new-install ghcjs-run
-        - ghcjs-boot -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot
+        - ghcjs-boot -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock
 
 # script:
 #   - ghcjs --version
