@@ -203,9 +203,6 @@ jobs:
     - stage: GHCJS Boot
       name: "GHCJS Boot"
       script:
-        - sudo add-apt-repository --yes ppa:hvr/ghc
-        - sudo apt-get update
-        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
         - export
