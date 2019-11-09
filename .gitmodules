@@ -2,6 +2,7 @@
   path = third_party/blockly
   url = https://github.com/stefan-j/blockly
 [submodule "ghcjs"]
-	path = ghcjs
-	url = https://github.com/ghcjs/ghcjs.git
-        branch = 8.6
+  path = ghcjs
+  url = https://github.com/ghcjs/ghcjs.git
+  branch = eeeb0cde48e093e278fc1a4f418b48a2d23aa08c
+# https://github.com/google/codeworld/issues/1184
