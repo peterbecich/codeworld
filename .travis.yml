@@ -75,7 +75,7 @@ jobs:
         - export PATH=$HOME/.local/bin:$PATH
         - stack build codeworld-auth
     - stage: Build
-      name: "Base"
+      name: "Base (with ghcjs-base-stub)"
       script:
         - export PATH=$HOME/.local/bin:$PATH
         - stack build codeworld-base
@@ -170,6 +170,8 @@ jobs:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
         - export
@@ -185,6 +187,8 @@ jobs:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
         - export
@@ -198,6 +202,8 @@ jobs:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
         - export
@@ -217,6 +223,8 @@ jobs:
         - sudo add-apt-repository --yes ppa:hvr/ghc
         - sudo apt-get update
         - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
         - nvm install 10
         - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
         - export
@@ -232,3 +240,44 @@ jobs:
         - ./utils/makePackages.sh
         - ghcjs --version
         - ghcjs-boot -j 2 -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
+        - cabal --ghcjs --version
+    - stage: Build_with_GHCJS
+      name: "API (with ghcjs)"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - git submodule update --init --recursive
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
+        - cabal --ghcjs new-configure codeworld-api
+        - cabal --ghcjs new-build codeworld-api
+    - stage: Build_with_GHCJS
+      name: "Base (with ghcjs)"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - export PATH=$HOME/.local/bin:$PATH
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - git submodule update --init --recursive
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
+        - cabal --ghcjs new-configure codeworld-base
+        - cabal --ghcjs new-build codeworld-base
