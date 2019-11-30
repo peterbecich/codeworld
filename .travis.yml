@@ -1,7 +1,9 @@
 # https://docs.haskellstack.org/en/stable/travis_ci/
 
+sudo: true
 dist: bionic
 language: generic
+
 cache:
   directories:
   - $HOME/.local/bin
@@ -17,6 +19,19 @@ cache:
   - $TRAVIS_BUILD_DIR/codeworld-game-server/.stack-work
   - $TRAVIS_BUILD_DIR/codeworld-prediction/.stack-work
   - $TRAVIS_BUILD_DIR/codeworld-server/.stack-work
+  - $HOME/.ghcjs
+  - $HOME/.ghc
+  - $HOME/.cabal
+  - $TRAVIS_BUILD_DIR/ghcjs/.cabal-sandbox
+  - $TRAVIS_BUILD_DIR/ghcjs/data
+  - $TRAVIS_BUILD_DIR/ghcjs/dist
+  - $TRAVIS_BUILD_DIR/ghcjs/dist-newstyle
+  - $TRAVIS_BUILD_DIR/ghcjs/ghcjs-boot
+  - $TRAVIS_BUILD_DIR/ghcjs/lib
+  - $TRAVIS_BUILD_DIR/ghcjs/lib/boot/data
+  - $TRAVIS_BUILD_DIR/ghcjs/lib/boot/pkg
+  - $TRAVIS_BUILD_DIR/ghcjs/utils
+  - $TRAVIS_BUILD_DIR/ghcjs/vendor
 
 addons:
   apt:
@@ -32,7 +47,7 @@ jobs:
         - if [ ! -d "$DIR" ]; then mkdir -p ~/.local/bin; fi
         - export PATH=$HOME/.local/bin:$PATH
         - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-        - stack setup
+        - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
     - stage: Build dependencies
       name: "Build dependencies"
       script:
@@ -149,3 +164,71 @@ jobs:
       script:
         - export PATH=$HOME/.local/bin:$PATH
         - stack test codeworld-server
+    - stage: Build GHCJS dependencies
+      name: "Build GHCJS dependencies"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - cabal new-update
+        - cabal new-configure
+        - cabal new-build --only-dependencies
+    - stage: Build GHCJS
+      name: "Build GHCJS"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - cabal new-build
+    - stage: install GHCJS
+      name: "install GHCJS"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - cabal new-install --only-dependencies --lib
+        - cabal new-install -v --lib
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+    - stage: GHCJS Boot
+      name: "GHCJS Boot"
+      script:
+        - sudo add-apt-repository --yes ppa:hvr/ghc
+        - sudo apt-get update
+        - sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5
+        - nvm install 10
+        - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
+        - export
+        - git submodule update --init --recursive
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
+        - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
+        - cd ghcjs
+        - git submodule update --init --recursive
+        - ./utils/makePackages.sh
+        - ghcjs --version
+        - ghcjs-boot -j 2 -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
