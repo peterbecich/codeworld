@@ -1,6 +1,6 @@
 # https://docs.haskellstack.org/en/stable/travis_ci/
 
-sudo: true
+sudo: false
 dist: bionic
 language: generic
 cache:
@@ -236,7 +236,7 @@ jobs:
         - git submodule update --init --recursive
         - ./utils/makePackages.sh
         - ghcjs --version
-        - ghcjs-boot -j -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
+        - ghcjs-boot -j 2 -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
         - cabal --ghcjs --version
     - stage: Build_with_GHCJS
       name: "API (with ghcjs)"
