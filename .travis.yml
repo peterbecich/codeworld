@@ -47,13 +47,18 @@ jobs:
         - export DIR=~/.local/bin
         - if [ ! -d "$DIR" ]; then mkdir -p ~/.local/bin; fi
         - export PATH=$HOME/.local/bin:$PATH
+        # - rm -rf $HOME/.stack # causes stack setup failure
+        - cd $HOME
+        - stack --version
+        - stack setup
         - stack upgrade
         - hash -r
+        - stack --version
         - stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4
     - stage: Build dependencies
       name: "Build dependencies"
       script:
-        # - stack clean --full  # if unreliability persists
+        - stack clean --full
         - export PATH=$HOME/.local/bin:$PATH
         - stack upgrade
         - hash -r
@@ -65,7 +70,7 @@ jobs:
         - export PATH=$HOME/.local/bin:$PATH
         - stack upgrade
         - hash -r
-        - stack build $PACKAGE
+        - stack build $PACKAGE # --ghc-options="-dynamic"
     - stage: Build
       name: "Account"
       env: PACKAGE="codeworld-account"
