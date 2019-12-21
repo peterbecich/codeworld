@@ -41,6 +41,19 @@ stages:
   # - build_with_ghcjs
   # - test_with_ghcjs
 
+env:
+  - PACKAGE=.
+  - PACKAGE=codeworld-account
+  - PACKAGE=codeworld-api
+  - PACKAGE=codeworld-auth
+  - PACKAGE=codeworld-base
+  - PACKAGE=codeworld-compile
+  - PACKAGE=codeworld-error-sanitizer
+  - PACKAGE=codeworld-game-api
+  - PACKAGE=codeworld-game-server
+  - PACKAGE=codeworld-prediction
+  - PACKAGE=codeworld-server
+
 jobs:
   include:
     - stage: upgrade_stack
@@ -95,98 +108,14 @@ jobs:
         - stack clean --full
         - stack build --dependencies-only
     - stage: build
-      name: "root"
-      env: PACKAGE="."
       script: &build
         - export PATH=$HOME/.local/bin:$PATH
         - stack upgrade --binary-only
         - hash -r
         - stack build $PACKAGE # --ghc-options="-dynamic"
-    - stage: build
-      name: "Account"
-      env: PACKAGE="codeworld-account"
-      script: *build
-    - stage: build
-      name: "API"
-      env: PACKAGE="codeworld-api"
-      script: *build
-    - stage: build
-      name: "Auth"
-      env: PACKAGE="codeworld-auth"
-      script: *build
-    - stage: build
-      name: "Base (with ghcjs-base-stub)"
-      env: PACKAGE="codeworld-base"
-      script: *build
-    - stage: build
-      name: "Compiler"
-      env: PACKAGE="codeworld-compiler"
-      script: *build
-    - stage: build
-      name: "Error Sanitizer"
-      env: PACKAGE="codeworld-error-sanitizer"
-      script: *build
-    - stage: build
-      name: "Game API"
-      env: PACKAGE="codeworld-game-api"
-      script: *build
-    - stage: build
-      name: "Game Server"
-      env: PACKAGE="codeworld-game-server"
-      script: *build
-    - stage: build
-      name: "Prediction"
-      env: PACKAGE="codeworld-prediction"
-      script: *build
-    - stage: build
-      name: "Server"
-      env: PACKAGE="codeworld-server"
-      script: *build
-    # - stage: Test
-    #   name: "root"
-    #  env: PACKAGE="*"
-    #   script: *test
     - stage: test
-      name: "Account"
-      env: PACKAGE="codeworld-account"
       script: &test
         - export PATH=$HOME/.local/bin:$PATH
         - stack upgrade --binary-only
         - hash -r
         - stack test $PACKAGE
-    - stage: test
-      name: "API"
-      env: PACKAGE="codeworld-api"
-      script: *test
-    - stage: test
-      name: "Auth"
-      env: PACKAGE="codeworld-auth"
-      script: *test
-    - stage: test
-      name: "Base (with ghcjs-base-stub)"
-      env: PACKAGE="codeworld-base"
-      script: *test
-    # - stage: test
-    #   name: "Compiler"
-    #   env: PACKAGE="codeworld-compiler"
-    #   script: *test
-    - stage: test
-      name: "Error Sanitizer"
-      env: PACKAGE="codeworld-error-sanitizer"
-      script: *test
-    - stage: test
-      name: "Game API"
-      env: PACKAGE="codeworld-game-api"
-      script: *test
-    - stage: test
-      name: "Game Server"
-      env: PACKAGE="codeworld-game-server"
-      script: *test
-    - stage: test
-      name: "Prediction"
-      env: PACKAGE="codeworld-prediction"
-      script: *test
-    - stage: test
-      name: "Server"
-      env: PACKAGE="codeworld-server"
-      script: *test
